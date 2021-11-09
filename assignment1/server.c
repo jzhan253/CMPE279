@@ -14,8 +14,8 @@ int main(int argc, char const *argv[])
     int opt = 1;
     int addrlen = sizeof(address);
     char buffer[1024] = {0};
-    char *hello = "Hello from server";
-
+    char *hello = "Woo from server";
+// ---------------- Setup socket --------------------------- 
     // Creating socket file descriptor
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
     {
@@ -23,8 +23,9 @@ int main(int argc, char const *argv[])
         exit(EXIT_FAILURE);
     }
 
-    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
-	&opt, sizeof(opt)))
+    // if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
+	// &opt, sizeof(opt)))
+    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR , &opt, sizeof(opt)))
     {
         perror("setsockopt");
         exit(EXIT_FAILURE);
@@ -52,6 +53,9 @@ int main(int argc, char const *argv[])
         perror("accept");
         exit(EXIT_FAILURE);
     }
+// ---------------- Setup socket --------------------------- 
+
+// ---------------- Process client data --------------------------- 
 
     valread = read(new_socket, buffer, 1024);
     printf("Read %d bytes: %s\n", valread, buffer);
@@ -59,4 +63,5 @@ int main(int argc, char const *argv[])
     printf("Hello message sent\n");
 
     return 0;
+// ---------------- Process client data --------------------------- 
 }
