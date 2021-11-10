@@ -60,10 +60,6 @@ int main(int argc, char const *argv[])
     pid_t pid = fork();
     struct passwd * pwd;
     if(pid == 0) {
-        // if((pwd = getpwnam("nobody")) == NULL){
-        //     perror("Failed to find UID for nobody!");
-        //     exit(EXIT_FAILURE);
-        // }
         pwd = getpwnam("nobody");
         if(pwd == NULL){
             perror("Failed to find UID for nobody!");
@@ -76,7 +72,6 @@ int main(int argc, char const *argv[])
         printf("Hello message sent\n");
         exit(0);
     }
-    // wait();
     return 0;
 // ---------------- Process client data --------------------------- 
 }
