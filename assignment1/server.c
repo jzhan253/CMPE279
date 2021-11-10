@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <netinet/in.h>
 #include <string.h>
+#include <pwd.h>
 #define PORT 8080
 
 int main(int argc, char const *argv[])
@@ -56,13 +57,26 @@ int main(int argc, char const *argv[])
 // ---------------- Setup socket --------------------------- 
 
 // ---------------- Process client data --------------------------- 
-    pid = fork();
+    pid_t pid = fork();
+    struct passwd * pwd;
     if(pid == 0) {
+        // if((pwd = getpwnam("nobody")) == NULL){
+        //     perror("Failed to find UID for nobody!");
+        //     exit(EXIT_FAILURE);
+        // }
+        pwd = getpwnam("nobody");
+        if(pwd == NULL){
+            perror("Failed to find UID for nobody!");
+            exit(EXIT_FAILURE);
+        }
+        setuid(pwd->pw_uid);
         valread = read(new_socket, buffer, 1024);
         printf("Read %d bytes: %s\n", valread, buffer);
         send(new_socket, hello, strlen(hello), 0);
         printf("Hello message sent\n");
+        exit(0);
     }
+    // wait();
     return 0;
 // ---------------- Process client data --------------------------- 
 }
