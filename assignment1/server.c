@@ -24,9 +24,8 @@ int main(int argc, char const *argv[])
         exit(EXIT_FAILURE);
     }
 
-    // if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
-	// &opt, sizeof(opt)))
-    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR , &opt, sizeof(opt)))
+    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)))
+    // if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR , &opt, sizeof(opt)))  use this line when running on MacOS
     {
         perror("setsockopt");
         exit(EXIT_FAILURE);
@@ -65,12 +64,16 @@ int main(int argc, char const *argv[])
             perror("Failed to find UID for nobody!");
             exit(EXIT_FAILURE);
         }
-        setuid(pwd->pw_uid);
-        valread = read(new_socket, buffer, 1024);
-        printf("Read %d bytes: %s\n", valread, buffer);
-        send(new_socket, hello, strlen(hello), 0);
-        printf("Hello message sent\n");
-        exit(0);
+        if(setuid(pwd->pw_uid) == 0){
+            valread = read(new_socket, buffer, 1024);
+            printf("Read %d bytes: %s\n", valread, buffer);
+            send(new_socket, hello, strlen(hello), 0);
+            printf("Hello message sent\n");
+            exit(0);
+	} else {
+	    perror("Set UID Failed! Try use sudo to start the server!");
+	    exit(EXIT_FAILURE);
+	}
     }
     return 0;
 // ---------------- Process client data --------------------------- 
