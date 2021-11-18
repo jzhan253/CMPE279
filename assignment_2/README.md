@@ -6,7 +6,7 @@ Team members:
 Starting with assignment 1 as a starting point, add in code to re-exec the server’s child process after forking.
 
 Follow these steps to start:
-cc -o server server.c
-cc -o client client.c
-sudo ./server
-./client
+- cc -o server server.c
+- cc -o client client.c
+- sudo ./server
+- ./client
